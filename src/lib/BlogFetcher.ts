@@ -16,8 +16,9 @@ const parser: Parser = new Parser({
 });
 
 export async function blogFetcher(url: string): Promise<Article[]> {
+  const hostname = new URL(url).hostname;
   const feed = await parser.parseURL(url);
-  const items = extractMyPosts(url, feed?.items ?? []);
+  const items = extractMyPosts(hostname, feed?.items ?? []);
 
   return items.map((item) => {
     return {
@@ -25,14 +26,14 @@ export async function blogFetcher(url: string): Promise<Article[]> {
       url: item?.link ?? "URL不明",
       pubDate: item?.pubDate ?? "公開日不明",
       isMySite: false,
-      slug: ""
+      slug: "",
+      hostname,
     };
   });
 }
 
-const extractMyPosts = (url: string, items: Parser.Item[]) => {
-  const fetchURL = new URL(url);
-  if (fetchURL.hostname === "tech-blog.voicy.jp") {
+const extractMyPosts = (hostname: string, items: Parser.Item[]) => {
+  if (hostname === "tech-blog.voicy.jp") {
     return items.filter((item) => {
       const guidLink = item.guid ?? null;
       if (!guidLink) return false;
@@ -46,4 +47,4 @@ const extractMyPosts = (url: string, items: Parser.Item[]) => {
     });
   }
   return items;
-}
+};

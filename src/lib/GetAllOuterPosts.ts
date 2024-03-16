@@ -21,9 +21,11 @@ export function getAllOuterPosts(): Promise<Article[]> {
     } else {
       isLoading = true;
 
-      Promise.allSettled(allOuterFeedList.map((feed)=>{
-        return blogFetcher(feed);
-      })).then((allResult) => {
+      Promise.allSettled(
+        allOuterFeedList.map((feed) => {
+          return blogFetcher(feed);
+        })
+      ).then((allResult) => {
         allResult.forEach((result) => {
           if (result.status === "fulfilled") {
             allOuterPosts.push(...result.value);
