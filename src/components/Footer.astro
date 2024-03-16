@@ -1,0 +1,22 @@
+---
+const today = new Date();
+---
+
+<footer class="footer">
+  <p class="footer__copyright">
+    &copy; {today.getFullYear()} komura-c all rights reserved.
+  </p>
+</footer>
+<style lang="scss">
+  .footer {
+    background-color: #424242;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+    &__copyright {
+      margin: 0;
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+</style>
