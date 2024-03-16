@@ -1,1 +1,0 @@
-# komura-c.log
