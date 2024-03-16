@@ -5,7 +5,9 @@ import Footer from "../components/Footer.astro";
 import { BLOG_SITE_TITLE, BLOG_SITE_DESCRIPTION  } from "../config";
 import type { Article } from "../types/Article";
 import ExternalLinkIcon from "../assets/external-link.svg";
-import GoogleAnalytics from "../lib/GoogleAnalytics.astro";
+import ZennIcon from "../assets/zenn-icon.svg";
+import QiitaIcon from "../assets/qiita-icon.png";
+import HatenaIcon from "../assets/hatena-icon.svg";
 import { Image } from "astro:assets";
 import { getAllOuterPosts } from "../lib/GetAllOuterPosts";
 import AstroLink from "../components/AstroLink.astro";
@@ -21,7 +23,8 @@ const mySiteArticles: Article[] = blogEntries.map(({ slug, data }) => {
     url: `/posts/${slug}/`,
     pubDate: data.pubDate,
     isMySite: true,
-    slug
+    slug,
+    hostname: Astro.site?.hostname ?? Astro.url.hostname ?? "",
   };
 });
 const outerPosts = await getAllOuterPosts();
@@ -64,6 +67,35 @@ allPosts.sort(
                     height={16}
                     alt="外部リンク"
                   />
+                  {
+                    post.hostname === 'zenn.dev' && (
+                      <Image
+                        src={ZennIcon}
+                        width={16}
+                        height={16}
+                        alt="外部リンクZenn"
+                      />
+                    ) || 
+                    post.hostname === 'qiita.com' && (
+                      <Image
+                        src={QiitaIcon}
+                        width={16}
+                        height={16}
+                        alt="外部リンクQiita"
+                      />
+                    ) || (
+                      post.hostname === 'komura-c.hatenablog.com' || 
+                      post.hostname === 'tech-blog.voicy.jp' 
+                    ) && (
+                      <Image
+                        src={HatenaIcon}
+                        width={16}
+                        height={16}
+                        alt="外部リンクHatena"
+                      />
+                    )
+                  }
+
                 </a>
               )}
             </li>
@@ -73,7 +105,6 @@ allPosts.sort(
     </section>
   </main>
   <Footer />
-  <GoogleAnalytics />
 </Layout>
 
 <style lang="scss">

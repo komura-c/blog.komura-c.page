@@ -1,12 +1,12 @@
 import type { Article } from "../types/Article";
 import { blogFetcher } from "./BlogFetcher";
 
-const myHatenaArticles = blogFetcher("https://komura-c.hatenablog.com/rss");
-const companyHatenaArticles = blogFetcher(
-  "https://tech-blog.voicy.jp/rss/author/komura_c"
-);
-const myZennArticles = blogFetcher("https://zenn.dev/komura_c/feed");
-const myQiitaArticles = blogFetcher("https://qiita.com/komura_c/feed");
+const allOuterFeedList = [
+  "https://komura-c.hatenablog.com/rss",
+  "https://tech-blog.voicy.jp/rss/author/komura_c",
+  "https://zenn.dev/komura_c/feed",
+  "https://qiita.com/komura_c/feed",
+];
 
 let isLoading = false;
 const fetchAwaits: ((value: Article[] | PromiseLike<Article[]>) => void)[] = [];
@@ -21,12 +21,11 @@ export function getAllOuterPosts(): Promise<Article[]> {
     } else {
       isLoading = true;
 
-      Promise.allSettled([
-        myHatenaArticles,
-        companyHatenaArticles,
-        myZennArticles,
-        myQiitaArticles,
-      ]).then((allResult) => {
+      Promise.allSettled(
+        allOuterFeedList.map((feed) => {
+          return blogFetcher(feed);
+        })
+      ).then((allResult) => {
         allResult.forEach((result) => {
           if (result.status === "fulfilled") {
             allOuterPosts.push(...result.value);
@@ -34,6 +33,10 @@ export function getAllOuterPosts(): Promise<Article[]> {
             reject(result.reason);
           }
         });
+
+        if (!allOuterPosts.length) {
+          reject(new Error("No feed items"));
+        }
 
         resolve(allOuterPosts);
 

@@ -4,4 +4,5 @@ export interface Article {
   pubDate: string;
   isMySite: boolean;
   slug: string;
+  hostname: string;
 }
