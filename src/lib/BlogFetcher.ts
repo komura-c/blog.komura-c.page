@@ -1,4 +1,4 @@
-import jsdom from "jsdom";
+import Parser from "rss-parser";
 import type { Article } from "../types/Article";
 
 const excludeHatenaGuidList = [
@@ -10,32 +10,31 @@ const excludeHatenaGuidList = [
   "820878482956325029",
 ];
 
+const parser: Parser = new Parser({
+  maxRedirects: 5,
+  timeout: 1000 * 10,
+});
+
 export async function blogFetcher(url: string): Promise<Article[]> {
-  const fetchURL = new URL(url);
-  const response = await fetch(fetchURL);
-  const resText = await response.text();
-  const parsedDom = new jsdom.JSDOM(resText, {
-    contentType: "text/xml",
+  const feed = await parser.parseURL(url);
+  const items = extractMyPosts(url, feed?.items ?? []);
+
+  return items.map((item) => {
+    return {
+      title: item?.title ?? "タイトル不明",
+      url: item?.link ?? "URL不明",
+      pubDate: item?.pubDate ?? "公開日不明",
+      isMySite: false,
+      slug: ""
+    };
   });
+}
 
-  if (fetchURL.hostname === "qiita.com") {
-    const entries = parsedDom.window.document.querySelectorAll("entry");
-    return Array.from(entries).map((entry) => {
-      return {
-        title: entry.querySelector("title")?.textContent ?? "タイトル不明",
-        url: entry.querySelector("url")?.textContent ?? "URL不明",
-        pubDate: entry.querySelector("published")?.textContent ?? "公開日不明",
-        isMySite: false,
-        slug: ""
-      };
-    });
-  }
-
-  const items = parsedDom.window.document.querySelectorAll("item");
-  let itemArray = Array.from(items);
+const extractMyPosts = (url: string, items: Parser.Item[]) => {
+  const fetchURL = new URL(url);
   if (fetchURL.hostname === "tech-blog.voicy.jp") {
-    itemArray = itemArray.filter((item) => {
-      const guidLink = item.querySelector("guid")?.textContent ?? null;
+    return items.filter((item) => {
+      const guidLink = item.guid ?? null;
       if (!guidLink) return false;
       const matchArray = guidLink.match(/hatenablog:\/\/entry\/(\d+$)/);
       if (!matchArray) return false;
@@ -46,14 +45,5 @@ export async function blogFetcher(url: string): Promise<Article[]> {
       );
     });
   }
-
-  return itemArray.map((item) => {
-    return {
-      title: item.querySelector("title")?.textContent ?? "タイトル不明",
-      url: item.querySelector("link")?.textContent ?? "URL不明",
-      pubDate: item.querySelector("pubDate")?.textContent ?? "公開日不明",
-      isMySite: false,
-      slug: ""
-    };
-  });
+  return items;
 }
