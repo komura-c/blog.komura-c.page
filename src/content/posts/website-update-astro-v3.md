@@ -6,7 +6,7 @@ pubDate: "2023-09-01 01:57:35 +0900"
 heroImage: ""
 draft: false
 createdDate: "2023-09-01 01:57:35 +0900"
-updatedDate: "2023-09-01 01:57:35 +0900"
+updatedDate: "2024-03-17 07:18:35 +0900"
 ---
 
 ## はじめに
@@ -31,14 +31,13 @@ astro はドキュメントが充実しているので、
 [Astro View Transitions](https://docs.astro.build/en/guides/view-transitions/)を見ながら Astro 上で View Transitions を使いました。
 
 はじめに、head タグの中で Astro が用意してくれている ViewTransitions の Component を記述します。
-また、transition を明示的に指定した箇所のみ適応するために html タグに`transition:animate="none"`属性を記述します。
 
 ```astro
 --
 import { ViewTransitions } from 'astro:transitions';
 --
 
-<html lang="ja" transition:animate="none">
+<html lang="ja">
   <head>
     <ViewTransitions />
   </head>
@@ -71,7 +70,6 @@ import { fade } from "astro:transitions";
 ## おわりに
 
 このページの遷移を確認したいために、新しく記事を書こうと思って凄く雑に書いてみました。
-コードは[komura-c/komura-c.github.io](https://github.com/komura-c/komura-c.github.io)にあります。
 
 紹介しなかった機能としては、ViewTransitions の Animation はカスタムで作ることができて拡張性があることや、Astro では`transition:persist`属性をタグに付与することで、ページ間でその HTML 要素の状態を維持できるなどの機能があるなどがあります。
 ViewTransitionsAPI は、まだ Experimental ではありますが、MPA でも SPA のような遷移ができかなり便利な API なので、
