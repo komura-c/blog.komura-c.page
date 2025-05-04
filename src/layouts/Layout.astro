@@ -21,6 +21,11 @@ const { title, description, image = "" } = Astro.props;
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
 
@@ -51,6 +56,26 @@ const { title, description, image = "" } = Astro.props;
 </html>
 
 <style lang="scss" is:global>
+  :root {
+    --color-primary: #3273dc;
+    --color-primary-dark: #2160c4;
+    --color-secondary: #fbbf5d;
+    --color-text: #333333;
+    --color-text-light: #595959;
+    --color-background: #ffffff;
+    --color-header-footer: #2c3e50;
+    --color-card-background: #ffffff;
+    --color-border: #e0e0e0;
+    --font-primary: 'Roboto', 'Noto Sans JP', sans-serif;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+  }
+
   *,
   *::before,
   *::after {
@@ -59,37 +84,38 @@ const { title, description, image = "" } = Astro.props;
   }
 
   html {
-    font-family: "Source Sans", sans-serif;
+    font-family: var(--font-primary);
   }
 
   body {
-    color: #333;
+    color: var(--color-text);
+    background-color: #f5f5f5;
   }
 
   a {
     text-decoration: none;
-    color: #3273dc;
+    color: var(--color-primary);
+    transition: all 0.3s ease;
     &:hover {
-      opacity: 0.6;
-      transition: all 0.4s ease;
+      color: var(--color-primary-dark);
     }
   }
 
   .container {
     max-width: 1000px;
-    padding: 20px 16px;
+    padding: var(--spacing-md) var(--spacing-md);
     margin: 60px auto;
   }
 
   .heading {
-    padding: 24px;
+    padding: var(--spacing-lg);
     text-align: center;
     &__title {
       position: relative;
       font-size: 32px;
       letter-spacing: 1.2px;
-      padding-bottom: 20px;
-      margin-bottom: 20px;
+      padding-bottom: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
       &::after {
         content: "";
         position: absolute;
@@ -98,7 +124,7 @@ const { title, description, image = "" } = Astro.props;
         width: 60px;
         height: 5px;
         transform: translateX(-50%);
-        background-color: #fbbf5d;
+        background-color: var(--color-secondary);
         border-radius: 2px;
       }
     }
