@@ -27,54 +27,65 @@ const { Content } = await entry.render();
   <BlogHeader title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION} />
   <main transition:animate={slide({ duration: '0.5s' })}>
     <article class="article">
-      {heroImage && <img width={720} height={360} src={heroImage} alt="" />}
-      <h1 class="title" transition:name={"blog-title-" + entry.slug}>{title}</h1>
-      {
-        pubDate && (
-          <span class="pub-date" transition:name={"blog-pub-date-" + entry.slug}>
-            <time>
-              {new Date(pubDate).toLocaleDateString("ja-jp", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </time>
-            作成
-          </span>
-        )
-      }
-      {
-        updatedDate && (
-          <span class="updated-date">
-            <time>
-              {new Date(updatedDate).toLocaleDateString("ja-jp", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </time>
-            更新
-          </span>
-        )
-      }
-      <hr />
-      <Content />
-      <hr />
-      <AstroLink href="/">
-        &gt; 一覧に戻る
-      </AstroLink>
+      <div class="article-header">
+        {heroImage && <img width={720} height={360} src={heroImage} alt="" class="hero-image" />}
+        <h1 class="title" transition:name={"blog-title-" + entry.slug}>{title}</h1>
+        <div class="article-meta">
+          {
+            pubDate && (
+              <span class="pub-date" transition:name={"blog-pub-date-" + entry.slug}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                <time>
+                  {new Date(pubDate).toLocaleDateString("ja-jp", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                作成
+              </span>
+            )
+          }
+          {
+            updatedDate && (
+              <span class="updated-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <time>
+                  {new Date(updatedDate).toLocaleDateString("ja-jp", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                更新
+              </span>
+            )
+          }
+        </div>
+      </div>
+      <div class="article-content">
+        <Content />
+      </div>
+      <div class="article-footer">
+        <AstroLink href="/" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          一覧に戻る
+        </AstroLink>
+      </div>
     </article>
   </main>
   <Footer />
 </Layout>
 
 <style lang="scss" is:global>
+  @use "../styles/mixins.scss" as mx;
+
   :root {
-    background-color: #fff;
+    background-color: var(--background-color);
     word-wrap: break-word;
     overflow-wrap: break-word;
-    line-height: 1.5;
-    color: #333;
+    line-height: 1.6;
+    color: var(--text-color);
   }
 
   h1,
@@ -82,72 +93,215 @@ const { Content } = await entry.render();
   h3,
   h4,
   h5,
-  h6,
-  strong,
-  b,
-  p {
-    color: #333;
-    margin: 12px 0;
+  h6 {
+    color: var(--text-color);
+    margin: 1.5em 0 0.75em;
+    font-family: 'Poppins', 'Noto Sans JP', sans-serif;
+    font-weight: 600;
+    line-height: 1.3;
   }
+  
+  h1 {
+    font-size: 2.25rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+  }
+  
+  h4 {
+    font-size: 1.25rem;
+  }
+  
+  h5 {
+    font-size: 1.1rem;
+  }
+  
+  h6 {
+    font-size: 1rem;
+  }
+  
+  p {
+    margin: 1em 0;
+    line-height: 1.8;
+  }
+  
+  strong, b {
+    font-weight: 600;
+  }
+  
   textarea {
     width: 100%;
     font-size: 16px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
   }
+  
   input {
     font-size: 16px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
   }
+  
   content {
-    line-height: 1.6;
+    line-height: 1.8;
   }
+  
   table {
     width: 100%;
+    border-collapse: collapse;
+    margin: 1.5em 0;
+    
+    th, td {
+      padding: 10px;
+      border: 1px solid var(--border-color);
+    }
+    
+    th {
+      background-color: var(--background-alt);
+      font-weight: 600;
+    }
+    
+    tr:nth-child(even) {
+      background-color: var(--background-alt);
+    }
   }
+  
   img {
     max-width: 100%;
     height: auto;
+    border-radius: 4px;
+    display: block;
+    margin: 1.5em auto;
   }
+  
   code {
     padding: 2px 5px;
-    background-color: #f2f2f2;
+    background-color: var(--background-alt);
+    border-radius: 3px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.9em;
   }
+  
   pre {
     padding: 1rem;
+    background-color: var(--background-alt);
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 1.5em 0;
+    
+    code {
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+    }
   }
-  pre > code {
-    all: unset;
-  }
+  
   blockquote {
-    border: 1px solid #999;
-    color: #222;
-    padding: 2px 0px 2px 20px;
-    margin: 0px;
+    border-left: 4px solid var(--primary-light);
+    color: var(--text-light);
+    padding: 0.5em 1em;
+    margin: 1.5em 0;
+    background-color: var(--background-alt);
+    border-radius: 0 4px 4px 0;
     font-style: italic;
+  }
+  
+  ul, ol {
+    padding-left: 1.5em;
+    margin: 1em 0;
+    
+    li {
+      margin: 0.5em 0;
+    }
   }
 
   .article {
-    margin: 12px auto;
-    max-width: 910px;
-    padding: 16px;
-
-    .title {
-      font-size: 28px;
+    margin: 30px auto;
+    max-width: 800px;
+    padding: 0 20px;
+    
+    @include mx.sp {
+      padding: 0 16px;
     }
-
-    .pub-date {
-      font-size: 14px;
-    }
-
-    .updated-date {
-      font-size: 14px;
-
-      &::before {
-        content: "/";
+    
+    .article-header {
+      margin-bottom: 40px;
+      text-align: center;
+      
+      .hero-image {
+        margin: 0 auto 30px;
+        border-radius: 8px;
+        box-shadow: var(--card-shadow);
+      }
+      
+      .title {
+        font-size: 2.25rem;
+        margin: 0 0 20px;
+        line-height: 1.3;
+        font-weight: 700;
+        
+        @include mx.sp {
+          font-size: 1.75rem;
+        }
+      }
+      
+      .article-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        
+        svg {
+          vertical-align: middle;
+          margin-right: 5px;
+        }
+        
+        .pub-date, .updated-date {
+          display: flex;
+          align-items: center;
+          
+          time {
+            margin: 0 5px;
+          }
+        }
       }
     }
-
-    hr {
-      border-top: 1px solid #ddd;
-      margin: 16px 0;
+    
+    .article-content {
+      margin-bottom: 40px;
+    }
+    
+    .article-footer {
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        background-color: var(--background-alt);
+        border-radius: 4px;
+        transition: all var(--transition-speed) ease;
+        
+        &:hover {
+          background-color: var(--primary-color);
+          color: white;
+        }
+      }
     }
   }
 </style>

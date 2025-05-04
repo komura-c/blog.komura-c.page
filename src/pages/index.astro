@@ -38,70 +38,88 @@ allPosts.sort(
   <BlogHeader title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION} />
   <main transition:animate={fade({ duration: '0.5s' })}>
     <section class="section">
-      <ul>
+      <div class="posts-container">
         {
           allPosts.map((post) => (
-            <li>
+            <div class="post-card">
               {post.isMySite ? (
-                <time datetime={post.pubDate} transition:name={"blog-pub-date-" + post.slug}>
-                  {new Date(post.pubDate).toLocaleDateString("ja-jp", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </time>
-                <AstroLink href={post.url} transition:name={"blog-title-" + post.slug}>{post.title}</AstroLink>
+                <>
+                  <time datetime={post.pubDate} class="post-date" transition:name={"blog-pub-date-" + post.slug}>
+                    {new Date(post.pubDate).toLocaleDateString("ja-jp", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <h3 class="post-title">
+                    <AstroLink href={post.url} transition:name={"blog-title-" + post.slug}>{post.title}</AstroLink>
+                  </h3>
+                  <div class="post-source internal">
+                    <span>ブログ記事</span>
+                  </div>
+                </>
               ) : (
-                <time datetime={post.pubDate}>
-                  {new Date(post.pubDate).toLocaleDateString("ja-jp", {
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                  })}
-                </time>
-                <a href={post.url} target="_blank" rel="noopener">
-                  {post.title}
-                  <Image
-                    src={ExternalLinkIcon}
-                    width={16}
-                    height={16}
-                    alt="外部リンク"
-                  />
-                  {
-                    post.hostname === 'zenn.dev' && (
+                <>
+                  <time datetime={post.pubDate} class="post-date">
+                    {new Date(post.pubDate).toLocaleDateString("ja-jp", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <h3 class="post-title">
+                    <a href={post.url} target="_blank" rel="noopener">
+                      {post.title}
+                    </a>
+                  </h3>
+                  <div class="post-source external">
+                    <span>外部記事</span>
+                    <div class="post-icons">
                       <Image
-                        src={ZennIcon}
+                        src={ExternalLinkIcon}
                         width={16}
                         height={16}
-                        alt="外部リンクZenn"
+                        alt="外部リンク"
                       />
-                    ) || 
-                    post.hostname === 'qiita.com' && (
-                      <Image
-                        src={QiitaIcon}
-                        width={16}
-                        height={16}
-                        alt="外部リンクQiita"
-                      />
-                    ) || (
-                      post.hostname === 'komura-c.hatenablog.com' || 
-                      post.hostname === 'tech-blog.voicy.jp' 
-                    ) && (
-                      <Image
-                        src={HatenaIcon}
-                        width={16}
-                        height={16}
-                        alt="外部リンクHatena"
-                      />
-                    )
-                  }
-
-                </a>
+                      {
+                        post.hostname === 'zenn.dev' && (
+                          <Image
+                            src={ZennIcon}
+                            width={16}
+                            height={16}
+                            alt="外部リンクZenn"
+                            class="source-icon"
+                          />
+                        ) || 
+                        post.hostname === 'qiita.com' && (
+                          <Image
+                            src={QiitaIcon}
+                            width={16}
+                            height={16}
+                            alt="外部リンクQiita"
+                            class="source-icon"
+                          />
+                        ) || (
+                          post.hostname === 'komura-c.hatenablog.com' || 
+                          post.hostname === 'tech-blog.voicy.jp' 
+                        ) && (
+                          <Image
+                            src={HatenaIcon}
+                            width={16}
+                            height={16}
+                            alt="外部リンクHatena"
+                            class="source-icon"
+                          />
+                        )
+                      }
+                    </div>
+                  </div>
+                </>
               )}
-            </li>
+            </div>
           ))
         }
-      </ul>
+      </div>
     </section>
   </main>
   <Footer />
@@ -112,34 +130,97 @@ allPosts.sort(
   
   .section {
     margin: 0 auto;
-    max-width: 910px;
-    padding: 8px 16px;
-    ul {
-      padding: 0;
-      list-style-type: none;
-
-      li {
-        display: flex;
-        margin: 12px 0;
-      }
-
-      time {
-        flex: 0 0 160px;
-        color: #595959;
-      }
-
+    max-width: 1100px;
+    padding: 30px 16px;
+    
+    .posts-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+      
       @include mx.sp {
-        li {
-          flex-direction: column;
-        }
-        time {
-          flex: 1;
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .post-card {
+      background-color: var(--background-color);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      border: 1px solid var(--border-color);
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      }
+      
+      .post-date {
+        font-size: 14px;
+        color: var(--text-light);
+        margin-bottom: 10px;
+        font-family: 'Poppins', sans-serif;
+      }
+      
+      .post-title {
+        font-size: 18px;
+        margin: 0 0 15px 0;
+        line-height: 1.4;
+        flex-grow: 1;
+        
+        a {
+          color: var(--text-color);
+          transition: color var(--transition-speed) ease;
+          
+          &:hover {
+            color: var(--primary-color);
+          }
+          
+          &:visited {
+            color: var(--primary-dark);
+          }
         }
       }
-
-      a {
-        &:visited {
-          color: #8e32dc;
+      
+      .post-source {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+        margin-top: auto;
+        padding-top: 10px;
+        border-top: 1px solid var(--border-color);
+        
+        span {
+          padding: 3px 8px;
+          border-radius: 4px;
+          font-weight: 500;
+        }
+        
+        &.internal span {
+          background-color: rgba(var(--primary-color-rgb, 74, 111, 165), 0.1);
+          color: var(--primary-color);
+        }
+        
+        &.external {
+          span {
+            background-color: rgba(var(--accent-color-rgb, 255, 126, 95), 0.1);
+            color: var(--accent-color);
+          }
+          
+          .post-icons {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            
+            .source-icon {
+              opacity: 0.8;
+            }
+          }
         }
       }
     }
