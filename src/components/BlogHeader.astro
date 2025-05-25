@@ -11,56 +11,92 @@ const { title, description } = Astro.props;
 
 <header class="blog-header">
   <div class="blog-header__content">
-    <h2 class="site-title">
+    <div class="site-title">
       <AstroLink class="site-title__link" href="/">{title}</AstroLink>
-    </h2>
+    </div>
     <p class="site-description">{description}</p>
   </div>
+  <div class="header-pattern"></div>
 </header>
 
 <style lang="scss">
   @use "../styles/mixins.scss" as mx;
 
   .blog-header {
+    position: relative;
     margin: 0;
-    padding: 8px 20px;
-    background-color: #424242;
+    padding: 24px 20px;
+    background: var(--header-bg);
     width: 100%;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 
     &__content {
+      position: relative;
       margin: 0 auto;
-      max-width: 900px;
+      max-width: 1100px;
       width: 100%;
+      z-index: 2;
     }
 
     .site-title {
       padding: 8px 0;
       margin: 0;
-
       color: #fff;
-      font-size: 20px;
-      font-weight: bold;
+      font-weight: 700;
       text-align: center;
+      font-family: 'Poppins', sans-serif;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
+      font-size: 1.75rem;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--border-color);
+      
       &__link {
         color: #fff;
+        transition: all var(--transition-speed) ease;
+        
+        &:hover {
+          color: var(--accent-light);
+          opacity: 1;
+        }
       }
 
       @include mx.sp {
-        font-size: 18px;
+        font-size: 22px;
       }
     }
+    
     .site-description {
-      padding: 8px 0;
+      padding: 12px 0;
       margin: 0;
-
-      color: #fff;
-      font-size: 14px;
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 16px;
       text-align: center;
-
+      max-width: 600px;
+      margin: 0 auto;
+      font-weight: 400;
+      
       @include mx.sp {
-        font-size: 12px;
+        font-size: 14px;
+        padding: 8px 0;
       }
+    }
+    
+    .header-pattern {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 1%, transparent 5%),
+        radial-gradient(circle at 75% 75%, rgba(255, 255, 255, 0.1) 1%, transparent 5%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.1) 1%, transparent 5%);
+      background-size: 60px 60px;
+      opacity: 0.6;
+      z-index: 1;
     }
   }
 </style>

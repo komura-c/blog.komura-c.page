@@ -21,6 +21,11 @@ const { title, description, image = "" } = Astro.props;
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
 
@@ -51,6 +56,27 @@ const { title, description, image = "" } = Astro.props;
 </html>
 
 <style lang="scss" is:global>
+  :root {
+    --primary-color: #4a6fa5;
+    --primary-color-rgb: 74, 111, 165;
+    --primary-light: #6b8cbe;
+    --primary-light-rgb: 107, 140, 190;
+    --primary-dark: #2d4a73;
+    --primary-dark-rgb: 45, 74, 115;
+    --accent-color: #ff7e5f;
+    --accent-color-rgb: 255, 126, 95;
+    --accent-light: #feb47b;
+    --accent-light-rgb: 254, 180, 123;
+    --text-color: #333333;
+    --text-light: #666666;
+    --background-color: #ffffff;
+    --background-alt: #f8f9fa;
+    --border-color: #e0e0e0;
+    --header-bg: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition-speed: 0.3s;
+  }
+
   *,
   *::before,
   *::after {
@@ -59,51 +85,76 @@ const { title, description, image = "" } = Astro.props;
   }
 
   html {
-    font-family: "Source Sans", sans-serif;
+    font-family: 'Noto Sans JP', 'Poppins', sans-serif;
+    scroll-behavior: smooth;
   }
 
   body {
-    color: #333;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
   }
 
   a {
     text-decoration: none;
-    color: #3273dc;
+    color: var(--primary-color);
+    transition: all var(--transition-speed) ease;
+    
     &:hover {
-      opacity: 0.6;
-      transition: all 0.4s ease;
+      color: var(--primary-light);
     }
   }
 
   .container {
-    max-width: 1000px;
+    max-width: 1100px;
     padding: 20px 16px;
     margin: 60px auto;
   }
 
   .heading {
-    padding: 24px;
+    padding: 32px 24px;
     text-align: center;
+    
     &__title {
       position: relative;
-      font-size: 32px;
+      font-size: 2.5rem;
+      font-weight: 700;
       letter-spacing: 1.2px;
       padding-bottom: 20px;
       margin-bottom: 20px;
+      font-family: 'Poppins', sans-serif;
+      
       &::after {
         content: "";
         position: absolute;
         left: 50%;
         bottom: 0px;
-        width: 60px;
-        height: 5px;
+        width: 80px;
+        height: 4px;
         transform: translateX(-50%);
-        background-color: #fbbf5d;
+        background: linear-gradient(90deg, var(--accent-color), var(--accent-light));
         border-radius: 2px;
       }
     }
+    
     &__text {
       letter-spacing: 1.2px;
+      font-size: 1.1rem;
+      color: var(--text-light);
+    }
+  }
+
+  button, .button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color var(--transition-speed) ease;
+    
+    &:hover {
+      background-color: var(--primary-light);
     }
   }
 </style>
