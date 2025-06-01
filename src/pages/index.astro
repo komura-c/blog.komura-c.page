@@ -37,44 +37,44 @@ allPosts.sort(
 <Layout title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION}>
   <BlogHeader title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION} />
   <main transition:animate={fade({ duration: '0.5s' })}>
-    <section class="section">
-      <div class="posts-container">
+    <section class="mx-auto max-w-[1100px] px-4 py-[30px]">
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-6 sp:grid-cols-1">
         {
           allPosts.map((post) => (
-            <div class="post-card">
+            <div class="bg-background rounded-lg p-5 shadow-card transition-all duration-300 flex flex-col h-full border border-border hover:-translate-y-[3px] hover:shadow-[0_6px_12px_rgba(0,0,0,0.1)]">
               {post.isMySite ? (
                 <>
-                  <time datetime={post.pubDate} class="post-date" transition:name={"blog-pub-date-" + post.slug}>
+                  <time datetime={post.pubDate} class="text-sm text-text-light mb-[10px] font-sans" transition:name={"blog-pub-date-" + post.slug}>
                     {new Date(post.pubDate).toLocaleDateString("ja-jp", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                     })}
                   </time>
-                  <h3 class="post-title">
-                    <AstroLink href={post.url} transition:name={"blog-title-" + post.slug}>{post.title}</AstroLink>
+                  <h3 class="text-lg m-0 mb-[15px] leading-[1.4] flex-grow">
+                    <AstroLink href={post.url} class="text-text transition-colors duration-300 hover:text-primary visited:text-primary-dark" transition:name={"blog-title-" + post.slug}>{post.title}</AstroLink>
                   </h3>
-                  <div class="post-source internal">
-                    <span>ブログ記事</span>
+                  <div class="flex items-center justify-between text-[13px] mt-auto pt-[10px] border-t border-border">
+                    <span class="px-2 py-[3px] rounded font-medium bg-primary/10 text-primary">ブログ記事</span>
                   </div>
                 </>
               ) : (
                 <>
-                  <time datetime={post.pubDate} class="post-date">
+                  <time datetime={post.pubDate} class="text-sm text-text-light mb-[10px] font-sans">
                     {new Date(post.pubDate).toLocaleDateString("ja-jp", {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                     })}
                   </time>
-                  <h3 class="post-title">
-                    <a href={post.url} target="_blank" rel="noopener">
+                  <h3 class="text-lg m-0 mb-[15px] leading-[1.4] flex-grow">
+                    <a href={post.url} target="_blank" rel="noopener" class="text-text transition-colors duration-300 hover:text-primary visited:text-primary-dark">
                       {post.title}
                     </a>
                   </h3>
-                  <div class="post-source external">
-                    <span>外部記事</span>
-                    <div class="post-icons">
+                  <div class="flex items-center justify-between text-[13px] mt-auto pt-[10px] border-t border-border">
+                    <span class="px-2 py-[3px] rounded font-medium bg-accent/10 text-accent">外部記事</span>
+                    <div class="flex items-center gap-2">
                       <Image
                         src={ExternalLinkIcon}
                         width={16}
@@ -88,7 +88,7 @@ allPosts.sort(
                             width={16}
                             height={16}
                             alt="外部リンクZenn"
-                            class="source-icon"
+                            class="opacity-80"
                           />
                         ) || 
                         post.hostname === 'qiita.com' && (
@@ -97,7 +97,7 @@ allPosts.sort(
                             width={16}
                             height={16}
                             alt="外部リンクQiita"
-                            class="source-icon"
+                            class="opacity-80"
                           />
                         ) || (
                           post.hostname === 'komura-c.hatenablog.com' || 
@@ -108,7 +108,7 @@ allPosts.sort(
                             width={16}
                             height={16}
                             alt="外部リンクHatena"
-                            class="source-icon"
+                            class="opacity-80"
                           />
                         )
                       }
@@ -125,104 +125,3 @@ allPosts.sort(
   <Footer />
 </Layout>
 
-<style lang="scss">
-  @use "../styles/mixins.scss" as mx;
-  
-  .section {
-    margin: 0 auto;
-    max-width: 1100px;
-    padding: 30px 16px;
-    
-    .posts-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 24px;
-      
-      @include mx.sp {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    .post-card {
-      background-color: var(--background-color);
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: var(--card-shadow);
-      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      border: 1px solid var(--border-color);
-      
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      }
-      
-      .post-date {
-        font-size: 14px;
-        color: var(--text-light);
-        margin-bottom: 10px;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      }
-      
-      .post-title {
-        font-size: 18px;
-        margin: 0 0 15px 0;
-        line-height: 1.4;
-        flex-grow: 1;
-        
-        a {
-          color: var(--text-color);
-          transition: color var(--transition-speed) ease;
-          
-          &:hover {
-            color: var(--primary-color);
-          }
-          
-          &:visited {
-            color: var(--primary-dark);
-          }
-        }
-      }
-      
-      .post-source {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 13px;
-        margin-top: auto;
-        padding-top: 10px;
-        border-top: 1px solid var(--border-color);
-        
-        span {
-          padding: 3px 8px;
-          border-radius: 4px;
-          font-weight: 500;
-        }
-        
-        &.internal span {
-          background-color: rgba(var(--primary-color-rgb, 74, 111, 165), 0.1);
-          color: var(--primary-color);
-        }
-        
-        &.external {
-          span {
-            background-color: rgba(var(--accent-color-rgb, 255, 126, 95), 0.1);
-            color: var(--accent-color);
-          }
-          
-          .post-icons {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            
-            .source-icon {
-              opacity: 0.8;
-            }
-          }
-        }
-      }
-    }
-  }
-</style>

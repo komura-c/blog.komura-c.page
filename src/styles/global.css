@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  a {
+    @apply text-primary no-underline transition-all duration-300 hover:text-primary-light;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-[1100px] px-4 py-5 mx-auto my-[60px];
+  }
+
+  .heading {
+    @apply py-8 px-6 text-center;
+  }
+
+  .heading__title {
+    @apply relative text-[2.5rem] font-bold tracking-wider pb-5 mb-5 font-sans after:content-[''] after:absolute after:left-1/2 after:bottom-0 after:w-20 after:h-1 after:-translate-x-1/2 after:bg-gradient-to-r after:from-accent after:to-accent-light after:rounded-sm;
+  }
+
+  .heading__text {
+    @apply tracking-wider text-[1.1rem] text-text-light;
+  }
+
+  .button {
+    @apply bg-primary text-white border-none px-4 py-2 rounded cursor-pointer transition-colors duration-300 hover:bg-primary-light;
+  }
+}
