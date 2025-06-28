@@ -41,82 +41,74 @@ allPosts.sort(
       <div class="posts-container">
         {
           allPosts.map((post) => (
-            <div class="post-card">
-              {post.isMySite ? (
-                <>
-                  <time datetime={post.pubDate} class="post-date" transition:name={"blog-pub-date-" + post.slug}>
-                    {new Date(post.pubDate).toLocaleDateString("ja-jp", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                  <h3 class="post-title">
-                    <AstroLink href={post.url} transition:name={"blog-title-" + post.slug}>{post.title}</AstroLink>
-                  </h3>
-                  <div class="post-source internal">
-                    <span>ブログ記事</span>
+            post.isMySite ? (
+              <AstroLink href={post.url} class="post-card" transition:name={"blog-title-" + post.slug}>
+                <time datetime={post.pubDate} class="post-date" transition:name={"blog-pub-date-" + post.slug}>
+                  {new Date(post.pubDate).toLocaleDateString("ja-jp", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                <h3 class="post-title">{post.title}</h3>
+                <div class="post-source internal">
+                  <span>ブログ記事</span>
+                </div>
+              </AstroLink>
+            ) : (
+              <a href={post.url} target="_blank" rel="noopener" class="post-card">
+                <time datetime={post.pubDate} class="post-date">
+                  {new Date(post.pubDate).toLocaleDateString("ja-jp", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                <h3 class="post-title">{post.title}</h3>
+                <div class="post-source external">
+                  <span>外部記事</span>
+                  <div class="post-icons">
+                    <Image
+                      src={ExternalLinkIcon}
+                      width={16}
+                      height={16}
+                      alt="外部リンク"
+                    />
+                    {
+                      post.hostname === 'zenn.dev' && (
+                        <Image
+                          src={ZennIcon}
+                          width={16}
+                          height={16}
+                          alt="外部リンクZenn"
+                          class="source-icon"
+                        />
+                      ) ||
+                      post.hostname === 'qiita.com' && (
+                        <Image
+                          src={QiitaIcon}
+                          width={16}
+                          height={16}
+                          alt="外部リンクQiita"
+                          class="source-icon"
+                        />
+                      ) || (
+                        post.hostname === 'komura-c.hatenablog.com' ||
+                        post.hostname === 'tech-blog.voicy.jp'
+                      ) && (
+                        <Image
+                          src={HatenaIcon}
+                          width={16}
+                          height={16}
+                          alt="外部リンクHatena"
+                          class="source-icon"
+                        />
+                      )
+                    }
                   </div>
-                </>
-              ) : (
-                <>
-                  <time datetime={post.pubDate} class="post-date">
-                    {new Date(post.pubDate).toLocaleDateString("ja-jp", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                  <h3 class="post-title">
-                    <a href={post.url} target="_blank" rel="noopener">
-                      {post.title}
-                    </a>
-                  </h3>
-                  <div class="post-source external">
-                    <span>外部記事</span>
-                    <div class="post-icons">
-                      <Image
-                        src={ExternalLinkIcon}
-                        width={16}
-                        height={16}
-                        alt="外部リンク"
-                      />
-                      {
-                        post.hostname === 'zenn.dev' && (
-                          <Image
-                            src={ZennIcon}
-                            width={16}
-                            height={16}
-                            alt="外部リンクZenn"
-                            class="source-icon"
-                          />
-                        ) || 
-                        post.hostname === 'qiita.com' && (
-                          <Image
-                            src={QiitaIcon}
-                            width={16}
-                            height={16}
-                            alt="外部リンクQiita"
-                            class="source-icon"
-                          />
-                        ) || (
-                          post.hostname === 'komura-c.hatenablog.com' || 
-                          post.hostname === 'tech-blog.voicy.jp' 
-                        ) && (
-                          <Image
-                            src={HatenaIcon}
-                            width={16}
-                            height={16}
-                            alt="外部リンクHatena"
-                            class="source-icon"
-                          />
-                        )
-                      }
-                    </div>
-                  </div>
-                </>
-              )}
-            </div>
+                </div>
+              </a>
+            )
           ))
         }
       </div>
@@ -148,16 +140,14 @@ allPosts.sort(
       border-radius: 8px;
       padding: 20px;
       box-shadow: var(--card-shadow);
-      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, color var(--transition-speed) ease;
       display: flex;
       flex-direction: column;
       height: 100%;
       border: 1px solid var(--border-color);
+      text-decoration: none;
+      color: inherit;
       
-      &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-      }
       
       .post-date {
         font-size: 14px;
@@ -171,18 +161,21 @@ allPosts.sort(
         margin: 0 0 15px 0;
         line-height: 1.4;
         flex-grow: 1;
-        
-        a {
-          color: var(--text-color);
-          transition: color var(--transition-speed) ease;
-          
-          &:hover {
-            color: var(--primary-color);
-          }
-          
-          &:visited {
-            color: var(--primary-dark);
-          }
+        color: var(--text-color);
+        transition: color var(--transition-speed) ease;
+      }
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        .post-title {
+          color: var(--primary-color);
+        }
+      }
+
+      &:visited {
+        .post-title {
+          color: var(--primary-dark);
         }
       }
       
