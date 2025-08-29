@@ -1,0 +1,13 @@
+name: update-hook
+on:
+  workflow_dispatch:
+jobs:
+  update-hook:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Create empty commit
+        run: git commit --allow-empty -m "update-$(date +'%Y-%m-%d-%H-%M')"
