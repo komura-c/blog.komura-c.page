@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import BlogHeader from "../components/BlogHeader.astro";
 import Footer from "../components/Footer.astro";
-import { BLOG_SITE_TITLE, BLOG_SITE_DESCRIPTION  } from "../config";
+import { BLOG_SITE_TITLE, BLOG_SITE_DESCRIPTION } from "../config";
 import type { Article } from "../types/Article";
 import ExternalLinkIcon from "../assets/external-link.svg";
 import ZennIcon from "../assets/zenn-icon.svg";
@@ -29,14 +29,12 @@ const mySiteArticles: Article[] = blogEntries.map(({ slug, data }) => {
 });
 const outerPosts = await getAllOuterPosts();
 const allPosts = [...mySiteArticles, ...outerPosts];
-allPosts.sort(
-  (a, b) => new Date(b.pubDate).valueOf() - new Date(a.pubDate).valueOf()
-);
+allPosts.sort((a, b) => new Date(b.pubDate).valueOf() - new Date(a.pubDate).valueOf());
 ---
 
 <Layout title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION}>
   <BlogHeader title={BLOG_SITE_TITLE} description={BLOG_SITE_DESCRIPTION} />
-  <main transition:animate={fade({ duration: '0.5s' })}>
+  <main transition:animate={fade({ duration: "0.5s" })}>
     <section class="section">
       <div class="posts-container">
         {
@@ -68,41 +66,16 @@ allPosts.sort(
                 <div class="post-source external">
                   <span>外部記事</span>
                   <div class="post-icons">
-                    <Image
-                      src={ExternalLinkIcon}
-                      width={16}
-                      height={16}
-                      alt="外部リンク"
-                    />
+                    <Image src={ExternalLinkIcon} width={16} height={16} alt="外部リンク" />
                     {
-                      post.hostname === 'zenn.dev' && (
-                        <Image
-                          src={ZennIcon}
-                          width={16}
-                          height={16}
-                          alt="外部リンクZenn"
-                          class="source-icon"
-                        />
+                      post.hostname === "zenn.dev" && (
+                        <Image src={ZennIcon} width={16} height={16} alt="外部リンクZenn" class="source-icon" />
                       ) ||
-                      post.hostname === 'qiita.com' && (
-                        <Image
-                          src={QiitaIcon}
-                          width={16}
-                          height={16}
-                          alt="外部リンクQiita"
-                          class="source-icon"
-                        />
-                      ) || (
-                        post.hostname === 'komura-c.hatenablog.com' ||
-                        post.hostname === 'tech-blog.voicy.jp'
-                      ) && (
-                        <Image
-                          src={HatenaIcon}
-                          width={16}
-                          height={16}
-                          alt="外部リンクHatena"
-                          class="source-icon"
-                        />
+                      post.hostname === "qiita.com" && (
+                        <Image src={QiitaIcon} width={16} height={16} alt="外部リンクQiita" class="source-icon" />
+                      ) ||
+                      (post.hostname === "komura-c.hatenablog.com" || post.hostname === "tech-blog.voicy.jp") && (
+                        <Image src={HatenaIcon} width={16} height={16} alt="外部リンクHatena" class="source-icon" />
                       )
                     }
                   </div>
@@ -119,43 +92,49 @@ allPosts.sort(
 
 <style lang="scss">
   @use "../styles/mixins.scss" as mx;
-  
+
   .section {
     margin: 0 auto;
     max-width: 1100px;
     padding: 30px 16px;
-    
+
     .posts-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 24px;
-      
+
       @include mx.sp {
         grid-template-columns: 1fr;
       }
     }
-    
+
     .post-card {
-      background-color: var(--background-color);
-      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 16px;
       padding: 20px;
-      box-shadow: var(--card-shadow);
-      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease, color var(--transition-speed) ease;
+      box-shadow: var(--card-shadow-soft);
+      transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
       display: flex;
       flex-direction: column;
       height: 100%;
-      border: 1px solid var(--border-color);
+      border: 1px solid rgba(0, 0, 0, 0.06);
       text-decoration: none;
       color: inherit;
-      
-      
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+
+      html.dark & {
+        background: rgba(20, 27, 42, 0.62);
+        border-color: rgba(255, 255, 255, 0.10);
+      }
+
       .post-date {
         font-size: 14px;
         color: var(--text-light);
         margin-bottom: 10px;
         font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       }
-      
+
       .post-title {
         font-size: 18px;
         margin: 0 0 15px 0;
@@ -166,8 +145,9 @@ allPosts.sort(
       }
 
       &:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        transform: translateY(-4px);
+        box-shadow: var(--card-shadow);
+
         .post-title {
           color: var(--primary-color);
         }
@@ -178,7 +158,7 @@ allPosts.sort(
           color: var(--primary-dark);
         }
       }
-      
+
       .post-source {
         display: flex;
         align-items: center;
@@ -187,31 +167,32 @@ allPosts.sort(
         margin-top: auto;
         padding-top: 10px;
         border-top: 1px solid var(--border-color);
-        
+
         span {
-          padding: 3px 8px;
-          border-radius: 4px;
-          font-weight: 500;
+          padding: 3px 10px;
+          border-radius: 999px;
+          font-weight: 600;
+          letter-spacing: 0.2px;
         }
-        
+
         &.internal span {
-          background-color: rgba(var(--primary-color-rgb, 74, 111, 165), 0.1);
+          background-color: rgba(var(--primary-color-rgb), 0.12);
           color: var(--primary-color);
         }
-        
+
         &.external {
           span {
-            background-color: rgba(var(--accent-color-rgb, 255, 126, 95), 0.1);
+            background-color: rgba(var(--accent-color-rgb), 0.14);
             color: var(--accent-color);
           }
-          
+
           .post-icons {
             display: flex;
             align-items: center;
             gap: 8px;
-            
+
             .source-icon {
-              opacity: 0.8;
+              opacity: 0.85;
             }
           }
         }

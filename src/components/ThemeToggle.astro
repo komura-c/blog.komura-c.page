@@ -1,0 +1,99 @@
+---
+const label = 'テーマ切替';
+---
+
+<button type="button" class="theme-toggle" aria-label={label} data-theme-toggle>
+  <span class="theme-toggle__text">Theme</span>
+  <span class="theme-toggle__icon" aria-hidden="true">
+    <span class="theme-toggle__moon">🌙</span>
+    <span class="theme-toggle__sun">☀️</span>
+  </span>
+</button>
+
+<script>
+  const root = document.documentElement;
+  const btn = document.querySelector('[data-theme-toggle]');
+
+  function getStored() {
+    try {
+      return localStorage.getItem('theme');
+    } catch {
+      return null;
+    }
+  }
+
+  function setStored(value) {
+    try {
+      localStorage.setItem('theme', value);
+    } catch {}
+  }
+
+  function apply(theme) {
+    root.classList.toggle('dark', theme === 'dark');
+    root.dataset.theme = theme;
+  }
+
+  btn?.addEventListener('click', () => {
+    const next = root.classList.contains('dark') ? 'light' : 'dark';
+    setStored(next);
+    apply(next);
+  });
+
+  // If nothing stored yet, follow system preference.
+  if (!getStored()) {
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)')?.matches;
+    apply(prefersDark ? 'dark' : 'light');
+  }
+</script>
+
+<style>
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.14);
+    color: rgba(255, 255, 255, 0.92);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background var(--transition-speed) ease, border-color var(--transition-speed) ease;
+  }
+
+  .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.20);
+    border-color: rgba(255, 255, 255, 0.45);
+  }
+
+  .theme-toggle__text {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  .theme-toggle__icon {
+    line-height: 1;
+    font-size: 14px;
+  }
+
+  .theme-toggle__moon {
+    display: none;
+  }
+
+  .dark .theme-toggle__moon {
+    display: inline;
+  }
+
+  .dark .theme-toggle__sun {
+    display: none;
+  }
+
+  /* On small screens, hide the text */
+  @media (max-width: 480px) {
+    .theme-toggle__text {
+      display: none;
+    }
+  }
+</style>
